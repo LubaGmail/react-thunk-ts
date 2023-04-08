@@ -9,7 +9,7 @@ import { ProductContainer, FooterContainer } from './product.styles';
 const Product = ({ product }) => {
     const { name, imageUrl, price } = product;
  
-    const cartItems = useSelector(selectCartItems)              // []
+    const cartItems = useSelector(selectCartItems)     // []
     const dispatch = useDispatch()
 
     const addCartItem = (product) => {

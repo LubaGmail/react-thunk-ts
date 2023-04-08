@@ -13,6 +13,7 @@ import {
 
 const CategoriesPreview = () => {
     const categoriesMap = useSelector(selectCategories);
+    // {hats: Array(9), jackets: Array(5),...}
     const loading = useSelector(selectLoading);
 
     return (
