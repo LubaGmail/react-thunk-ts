@@ -1,14 +1,17 @@
 /**
-    all state = {categories: {…}, cart: {…}}            obj of objs
-      state.categories = {categories: Array(5)}         obj of Array
-        state.categories.categories = (5) [{…}, {…}, {…}, {…}, {…}]    Array of objs: title, items
+    RootState = {categories: {…}, cart: {…}}            
+      state.categories = {categories: Array(5)}           all categories
+        state.categories.categories = (5) [{…}, {…}, {…}, {…}, {…}]     single category
  */
-import { CategoryItem, Category, CategoriesMap } from "./categories.types";
+import { Category, CategoriesMap } from "./categories.types";
 import { CategoriesState } from "./categories.reducer";
 
-export const selectCategories = (state: any) => {
+type RootState = {
+  categories: CategoriesState
+}
+
+export const selectCategories = (state: RootState) => {
     const categoriesMap = state.categories.categories.reduce (
-      // (acc: CategoriesMap, { title, items }) => {
       (acc: CategoriesMap, category: Category) => {
           acc[category.title.toLowerCase()] = category.items;
           return acc;
@@ -17,6 +20,6 @@ export const selectCategories = (state: any) => {
     return categoriesMap;
 }
 
-export const selectLoading = (state: any) => {
+export const selectLoading = (state: RootState) => {
   return state.categories.loading;
 }
