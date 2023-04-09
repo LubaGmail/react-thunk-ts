@@ -13,13 +13,12 @@ import {
 
 const Category = () => {
     // routes/shop   <Route path=':category' element={<Category />} />
-    const p = useParams();
-    if (!p?.category) throw new Error('Category param not received.')
- 
-    const title: string = p.category
+    const params = useParams();
+    if ( !params || !params.category ) throw new Error('Category param not received.')
+    const title: string = params.category
 
     const categoriesMap = useSelector(selectCategories);
-    const [products, setProducts] = useState(categoriesMap[p.category]);
+    const [products, setProducts] = useState(categoriesMap[title]);
   
     useEffect(() => {
         setProducts(categoriesMap[title]);
@@ -27,7 +26,7 @@ const Category = () => {
 
     return (
         <CategoryContainer>
-            <Title>{p.category.toUpperCase()}</Title>
+            <Title>{title.toUpperCase()}</Title>
             <ProductContainer>
                 {
                     products?.map( product => (
