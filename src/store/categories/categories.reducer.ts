@@ -1,24 +1,25 @@
 import { AnyAction } from "redux";
 
 import { CATEGORIES_ACTION_ENUM } from './categories.types';
-import { Category } from "./categories.types";
+import { Category, CategoryItem } from "./categories.types";
 
-export const CATEGORIES_INITIAL_STATE = {
+
+export type CategoriesState = {
+    readonly categories: Category[],
+    readonly loading: boolean,
+    readonly error: Error | null
+}
+
+export const CATEGORIES_INITIAL_STATE: CategoriesState = {
     categories: [],
     loading: false,
     error: null
 };
 
-export type CategoriesState = {
-    readonly categories: Category[],
-    readonly isLoading: false,
-    readonly error: Error | null
-}
-
 export const categoriesReducer = (
     state = CATEGORIES_INITIAL_STATE,
     action: AnyAction
-) => {
+): CategoriesState => {
     switch (action.type) {
         case CATEGORIES_ACTION_ENUM.GET_CATEGORIES_START:
             return { ...state, loading: true };

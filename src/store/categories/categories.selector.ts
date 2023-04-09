@@ -4,6 +4,7 @@
         state.categories.categories = (5) [{…}, {…}, {…}, {…}, {…}]    Array of objs: title, items
  */
 import { CategoryItem, Category, CategoriesMap } from "./categories.types";
+import { CategoriesState } from "./categories.reducer";
 
 export const selectCategories = (state: any) => {
     const categoriesMap = state.categories.categories.reduce (
