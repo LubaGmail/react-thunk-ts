@@ -1,8 +1,7 @@
 import { AnyAction } from "redux";
 
 import { CATEGORIES_ACTION_ENUM } from './categories.types';
-import { Category, CategoryItem } from "./categories.types";
-
+import { Category } from "./categories.types";
 
 export type CategoriesState = {
     readonly categories: Category[],
