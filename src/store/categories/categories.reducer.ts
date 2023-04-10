@@ -2,6 +2,7 @@ import { AnyAction } from "redux";
 
 import { CATEGORIES_ACTION_ENUM } from './categories.types';
 import { Category } from "./categories.types";
+import { CategoriesAction } from "./categories.actions";
 
 export type CategoriesState = {
     readonly categories: Category[],
@@ -17,7 +18,7 @@ export const CATEGORIES_INITIAL_STATE: CategoriesState = {
 
 export const categoriesReducer = (
     state = CATEGORIES_INITIAL_STATE,
-    action: AnyAction
+    action: CategoriesAction
 ): CategoriesState => {
     switch (action.type) {
         case CATEGORIES_ACTION_ENUM.GET_CATEGORIES_START:

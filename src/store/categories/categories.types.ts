@@ -1,3 +1,5 @@
+import { DocumentData } from "firebase/firestore";
+
 export const CATEGORIES_ACTION_TYPES = {
   GET_CATEGORIES_START: 'categories/GET_CATEGORIES_START',
   GET_CATEGORIES_SUCCESS: 'categories/GET_CATEGORIES_SUCCESS',
@@ -17,11 +19,13 @@ export type CategoryItem = {
   price: number
 }
 
-export type Category = {
+export interface Category extends DocumentData  {
   title: string,
   imageUrl: string,
   items: CategoryItem[]
 }
+
+export type FirebaseError = any | unknown;
 
 export type CategoriesMap = {
   [key: string]: CategoryItem[];

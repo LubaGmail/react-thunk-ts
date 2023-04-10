@@ -1,21 +1,32 @@
 import { Dispatch } from "redux";
 import { getCategories } from "../../utils/firebase/firebase";
 
-import { CATEGORIES_ACTION_ENUM } from "./categories.types";
-import { createAction } from "../../utils/reducer/reducer.utils";
+import { CATEGORIES_ACTION_ENUM, Category, FirebaseError } from "./categories.types";
+import { createAction, Action, ActionWithPayload } from "../../utils/reducer/reducer.utils";
 
+export type FetchCategoriesStart = Action<CATEGORIES_ACTION_ENUM.GET_CATEGORIES_START>;
+
+export type FetchCategoriesSuccess = ActionWithPayload<CATEGORIES_ACTION_ENUM.GET_CATEGORIES_SUCCESS, Category[] >;
+      
+export type FetchCategoriesFailed = ActionWithPayload<CATEGORIES_ACTION_ENUM.GET_CATEGORIES_FAILURE, Error>;
+
+export type CategoriesAction = FetchCategoriesStart | FetchCategoriesSuccess | FetchCategoriesFailed;
+  
 export const fetchCategoriesAsyncStart = () => {
     return async (dispatch: Dispatch) => {
-        dispatch(createAction(CATEGORIES_ACTION_ENUM.GET_CATEGORIES_START));
+        const actionStart: FetchCategoriesStart = createAction(CATEGORIES_ACTION_ENUM.GET_CATEGORIES_START)
+        dispatch(actionStart);
 
         try {
-            const categories = await getCategories();
-            //                    type: 'categories/GET_CATEGORIES_SUCCESS', payload: Array(5)
-            dispatch(createAction(CATEGORIES_ACTION_ENUM.GET_CATEGORIES_SUCCESS, categories));
+            const categories: any  = await getCategories();
 
-        } catch (error: any) {
+            const actionSuccess: FetchCategoriesSuccess = createAction(CATEGORIES_ACTION_ENUM.GET_CATEGORIES_SUCCESS, categories);
+            dispatch(actionSuccess);
+
+        } catch (error: FirebaseError) {
             alert(error.toString());
-            dispatch(createAction(CATEGORIES_ACTION_ENUM.GET_CATEGORIES_FAILURE));
+            const actionFailed: FetchCategoriesFailed = createAction(CATEGORIES_ACTION_ENUM.GET_CATEGORIES_FAILURE, error);
+            dispatch(actionFailed);
         }
     }
 }
