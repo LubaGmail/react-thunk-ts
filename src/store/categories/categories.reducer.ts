@@ -21,11 +21,11 @@ export const categoriesReducer = (
     action: CategoriesAction
 ): CategoriesState => {
     switch (action.type) {
-        case CATEGORIES_ACTION_ENUM.GET_CATEGORIES_START:
+        case CATEGORIES_ACTION_ENUM.FETCH_CATEGORIES_START:
             return { ...state, loading: true };
-        case CATEGORIES_ACTION_ENUM.GET_CATEGORIES_SUCCESS:
+        case CATEGORIES_ACTION_ENUM.FETCH_CATEGORIES_SUCCESS:
             return { ...state, categories: action.payload, loading: false };
-        case CATEGORIES_ACTION_ENUM.GET_CATEGORIES_FAILURE:
+        case CATEGORIES_ACTION_ENUM.FETCH_CATEGORIES_FAILED:
             return { ...state, loading: false, error: action.payload };
         default:
             return state;
