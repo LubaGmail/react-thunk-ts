@@ -13,6 +13,7 @@ export type FetchCategoriesFailed = ActionWithPayload<CATEGORIES_ACTION_ENUM.FET
 export type CategoriesAction = FetchCategoriesStart | FetchCategoriesSuccess | FetchCategoriesFailed;
   
 export const fetchCategoriesAsyncStart = () => {
+
     return async (dispatch: Dispatch) => {
 
         const actionStart: FetchCategoriesStart = createAction(CATEGORIES_ACTION_ENUM.FETCH_CATEGORIES_START);
@@ -30,4 +31,5 @@ export const fetchCategoriesAsyncStart = () => {
             dispatch(actionFailed);
         }
     }
+    
 }
