@@ -14,6 +14,7 @@ import {
 const CartDropdown = () => {
     // cartItems: [] 
     const { cartItems } = useSelector(selectCart)
+    console.log('ci', cartItems);
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
