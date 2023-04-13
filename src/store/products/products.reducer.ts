@@ -1,6 +1,5 @@
-import { AnyAction } from "redux";
-import { PRODUCTS_ACTION_ENUM } from "./products.types"; 
-import { ProductsArr  } from "./products.types";
+import { PRODUCTS_ACTION_ENUM, ProductsArr } from "./products.types"; 
+import { ProductsAction } from "./products.actions";
 
 const INITIAL_PRODUCTS_STATE: ProductsState = {
     productsArr: [],
@@ -8,14 +7,14 @@ const INITIAL_PRODUCTS_STATE: ProductsState = {
     error: null
 }
 export type ProductsState = {
-    readonly productsArr: ProductsArr[],
+    readonly productsArr: ProductsArr[],        // array of arrays
     readonly loading: boolean,
     readonly error: Error | null
 }
 
 export const productsReducer = (
         state = INITIAL_PRODUCTS_STATE,
-        action: AnyAction) => {
+        action: ProductsAction) => {
     switch (action.type) {
         case PRODUCTS_ACTION_ENUM.GET_PRODUCTS_START:
             return {...state, loading: true}

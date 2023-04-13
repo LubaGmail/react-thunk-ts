@@ -10,7 +10,7 @@ type StateWrapper = {
 }
 
 export const selectFeatured = (state: StateWrapper) => {
-    const featured:Product[] = [];
+    const featured:Product[] = [];              
     const productsArr = state.products.productsArr;
 
     productsArr.forEach((group) => {
