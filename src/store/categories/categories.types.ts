@@ -12,6 +12,13 @@ export enum CATEGORIES_ACTION_ENUM {
   FETCH_CATEGORIES_FAILED =  'categories/FETCH_CATEGORIES_FAILED'
 }
 
+/* 
+    (5) [{…}, {…}, {…}, {…}, {…}]
+        [0]
+            items: (9) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+            title: "Hats"
+*/
+
 export type CategoryItem = {
   id: number,
   imageUrl: string,
@@ -19,7 +26,7 @@ export type CategoryItem = {
   price: number
 }
 
-export interface Category extends DocumentData  {
+export type Category = {
   title: string,
   imageUrl: string,
   items: CategoryItem[]

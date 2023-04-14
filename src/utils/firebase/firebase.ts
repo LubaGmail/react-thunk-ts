@@ -8,7 +8,9 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     signOut,    
-    onAuthStateChanged
+    onAuthStateChanged,
+    NextOrObserver,
+    User
 } from "firebase/auth"
 
 import {
@@ -20,7 +22,9 @@ import {
     collection,
     writeBatch,
     query,
+    DocumentData,
 } from 'firebase/firestore';
+import { Category } from "../../store/categories/categories.types";
 
 const firebaseConfig = {
     apiKey: "AIzaSyA_aLrzSqrunPW4Xq4rGvWFJpNMxXuV7gw",
@@ -34,35 +38,50 @@ const firebaseConfig = {
 try
 {
     initializeApp(firebaseConfig);
-} catch(error) {
+} catch(error: any | unknown) {
     throw new Error(error.toString());
 }
 
 // clothing-db-63b47
 export const db = getFirestore();
 
-export const addCollection = async (collectionKey, objectsToAdd) => {
-    // start transaction
-    const batch = writeBatch(db);
-    const collectionRef = collection(db, collectionKey);
-    
-    objectsToAdd.forEach((object) => {
-        // called from: addCollection('categories', SHOP_DATA)
-        const docRef = doc(collectionRef, object.title.toLowerCase());
-        batch.set(docRef, object);
-    });
-
-    await batch.commit();
-    console.log('done');
+export type ObjectToAdd = {
+    title: string
 }
 
-export const getCategories = async () => {
+export const addCollection = async <T extends ObjectToAdd>(
+    collectionKey: string,
+    objectToAdd: T[]): Promise<void> => {
+    
+        // start transaction
+        const batch = writeBatch(db);
+        const collectionRef = collection(db, collectionKey);
+        
+        objectToAdd.forEach((object) => {
+            // called from: addCollection('categories', SHOP_DATA)
+            const docRef = doc(collectionRef, object.title.toLowerCase());
+            batch.set(docRef, object);
+        });
+
+        await batch.commit();
+        console.log('done');
+}
+
+/* 
+    (5) [{…}, {…}, {…}, {…}, {…}]
+        [0]
+            items: (9) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+            title: "Hats"
+*/
+export const getCategories = async (): Promise<any> => {
     const collectionRef = collection(db, 'categories');
     const q = query(collectionRef);
     const querySnapshot = await getDocs(q);
     
     // throw new Error('Error fetching categories');
-    return querySnapshot.docs.map((doc) => doc.data());
+    const data = querySnapshot.docs.map((doc) => doc.data());
+
+    return data;
 }
 
 export const getAllProducts = async () => {
@@ -72,11 +91,12 @@ export const getAllProducts = async () => {
     let items = querySnapshot.docs.map((doc) => doc.data().items);
     
     // throw new Error('Error fetching products');
+    console.log('items', items)
     return items;
 }
 
 // doc based on user.uid and user.accessToken
-export const createUserDocumentFromAuth = async (userAuth, additionalInformation = {}) => {
+export const createUserDocumentFromAuth = async (userAuth: any, additionalInformation = {}) => {
     if (!userAuth) return;
 
     // createUserWithEmailAndPassword(auth, email, pass)
@@ -96,7 +116,7 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInformation
                 createdAt,
                 ...additionalInformation,
             });
-        } catch (error) {
+        } catch (error: any | unknown) {
             throw new Error('error creating the user', error.message);
         }
     }
@@ -104,7 +124,7 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInformation
 }
 
 // const res = await createAuthUserWithEmailAndPassword(email, pass, confirmPass)
-export const createAuthUserWithEmailAndPassword = async (email, pass, confirmPass) => {
+export const createAuthUserWithEmailAndPassword = async (email: string, pass: string, confirmPass: string) => {
     // validate fields
     if (pass !== confirmPass) {
        throw new Error('signup-form.handleSubmit - password and confirmPassword must be equal.')
@@ -118,7 +138,7 @@ export const createAuthUserWithEmailAndPassword = async (email, pass, confirmPas
     return userCredentialImpl
 }
 
-export const signInAuthUserWithEmailAndPassword = async (email, pass) => {
+export const signInAuthUserWithEmailAndPassword = async (email: string, pass: string) => {
     if (!email || !pass) {
         throw new Error('signin-form.handleSubmit - email and password not entered.')
     }
@@ -140,7 +160,7 @@ export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider)
 export const signOutUser = async () => await signOut(auth);
 
 // give me a callback as soon as the function is instantiated
-export const onAuthStateChangedListener = (callback) => onAuthStateChanged(auth, callback)
+export const onAuthStateChangedListener = (callback:NextOrObserver<User>) => onAuthStateChanged(auth, callback)
 
 // application wide
 export const auth = getAuth()

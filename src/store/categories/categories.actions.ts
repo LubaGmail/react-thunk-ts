@@ -3,13 +3,11 @@ import { getCategories } from "../../utils/firebase/firebase";
 
 import { CATEGORIES_ACTION_ENUM, Category, FirebaseError } from "./categories.types";
 import { createAction, Action, ActionWithPayload } from "../../utils/reducer/reducer.utils";
+import { DocumentData } from "firebase/firestore";
 
 export type FetchCategoriesStart = Action<CATEGORIES_ACTION_ENUM.FETCH_CATEGORIES_START>;
-
-export type FetchCategoriesSuccess = ActionWithPayload<CATEGORIES_ACTION_ENUM.FETCH_CATEGORIES_SUCCESS, Category[] >;
-      
+export type FetchCategoriesSuccess = ActionWithPayload<CATEGORIES_ACTION_ENUM.FETCH_CATEGORIES_SUCCESS, any[] >;
 export type FetchCategoriesFailed = ActionWithPayload<CATEGORIES_ACTION_ENUM.FETCH_CATEGORIES_FAILED, Error>;
-
 export type CategoriesAction = FetchCategoriesStart | FetchCategoriesSuccess | FetchCategoriesFailed;
   
 export const fetchCategoriesAsyncStart = () => {
@@ -20,8 +18,14 @@ export const fetchCategoriesAsyncStart = () => {
         dispatch(actionStart);
 
         try {
-            const categories: any  = await getCategories();
-
+            /* 
+                (5) [{…}, {…}, {…}, {…}, {…}]
+                    [0]
+                        items: (9) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}],
+                        title: "Hats"
+            */
+            const categories: DocumentData[]  = await getCategories();
+            
             const actionSuccess: FetchCategoriesSuccess = createAction(CATEGORIES_ACTION_ENUM.FETCH_CATEGORIES_SUCCESS, categories);
             dispatch(actionSuccess);
 

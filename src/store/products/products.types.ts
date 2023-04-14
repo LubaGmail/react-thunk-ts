@@ -12,7 +12,7 @@ export enum PRODUCTS_ACTION_ENUM {
         {featured: false, id: 1, imageUrl: 'https://i.ibb.co/ZYW3VTp/brown-brim.png', price: 25, name: 'Brown Brim'}
 */
 
-export type Product = {
+export type ProductType = {
     featured: boolean,
     id: number,
     imageUrl: string,
@@ -22,5 +22,5 @@ export type Product = {
 // array of arrays
 export type ProductsArr= {
     [x: string]: any,
-    products: Product[]
+    products: ProductType[]
 }

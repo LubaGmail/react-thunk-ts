@@ -1,4 +1,4 @@
-import { Product } from "./products.types";
+import { ProductType } from "./products.types";
 import { ProductsState } from "./products.reducer";
 
 export const selectProducts = (state: any) => {
@@ -9,12 +9,12 @@ type StateWrapper = {
     products: ProductsState
 }
 
-export const selectFeatured = (state: StateWrapper) => {
-    const featured:Product[] = [];              
+export const selectFeatured = (state: StateWrapper): ProductType[] => {
+    const featured: ProductType[] = [];              
     const productsArr = state.products.productsArr;
 
     productsArr.forEach((group) => {
-        group.forEach( (product:Product) => {
+        group.forEach( (product: ProductType) => {
             if (product.featured) {
                 featured.push(product)
             }
@@ -23,6 +23,6 @@ export const selectFeatured = (state: StateWrapper) => {
     return featured;
 }
 
-export const selectLoading = (state: any) => {
+export const selectLoading = (state: any): boolean => {
     return state.products.loading;
 }
