@@ -24,6 +24,6 @@ export type CartItemType = {
     quantity: number
 }
 export type CartItemsType = {
-    [x:string] : any
-    cartItems: CartItemType[]
+    [x: string]: any;
+    cartItems: CartItemType[];
 }
