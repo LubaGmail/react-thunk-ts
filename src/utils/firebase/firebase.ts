@@ -2,7 +2,6 @@ import { initializeApp } from "firebase/app";
 
 import {
     getAuth,
-    signInWithRedirect,
     signInWithPopup,
     GoogleAuthProvider,
     createUserWithEmailAndPassword,
@@ -23,6 +22,7 @@ import {
     writeBatch,
     query,
     DocumentData,
+    DocumentReference,
 } from 'firebase/firestore';
 import { Category } from "../../store/categories/categories.types";
 
@@ -67,19 +67,13 @@ export const addCollection = async <T extends ObjectToAdd>(
         console.log('done');
 }
 
-/* 
-    (5) [{…}, {…}, {…}, {…}, {…}]
-        [0]
-            items: (9) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
-            title: "Hats"
-*/
 export const getCategories = async (): Promise<any> => {
     const collectionRef = collection(db, 'categories');
     const q = query(collectionRef);
     const querySnapshot = await getDocs(q);
     
     // throw new Error('Error fetching categories');
-    const data = querySnapshot.docs.map((doc) => doc.data());
+    const data = querySnapshot.docs.map((doc) => doc.data() as Category);
 
     return data;
 }
@@ -95,32 +89,45 @@ export const getAllProducts = async () => {
     return items;
 }
 
+export type AdditionalInformation = {
+    displayName?: string;
+}
+
+export type UserData = {
+    createdAt: Date;
+    displayName: string;
+    email: string;
+};
+
 // doc based on user.uid and user.accessToken
-export const createUserDocumentFromAuth = async (userAuth: any, additionalInformation = {}) => {
-    if (!userAuth) return;
+export const createUserDocumentFromAuth = async (
+    userAuth: User,
+    additionalInformation = {} as AdditionalInformation
+    ): Promise<DocumentReference<DocumentData> | void> => {
+        if (!userAuth) return;
 
-    // createUserWithEmailAndPassword(auth, email, pass)
-    // signInWithPopup(auth, googleProvider)
-    const userDocRef = doc(db, 'users', userAuth.uid);
-    const userSnapshot = await getDoc(userDocRef);
-    const exists = userSnapshot.exists()
+        // createUserWithEmailAndPassword(auth, email, pass)
+        // signInWithPopup(auth, googleProvider)
+        const userDocRef = doc(db, 'users', userAuth.uid);
+        const userSnapshot = await getDoc(userDocRef);
+        const exists = userSnapshot.exists()
 
-    if (!exists) {
-        // Both Athentication record and users document is created in Firestore
-        const { displayName, email } = userAuth;
-        const createdAt = new Date();
-        try {
-            await setDoc(userDocRef, {
-                displayName,    
-                email,
-                createdAt,
-                ...additionalInformation,
-            });
-        } catch (error: any | unknown) {
-            throw new Error('error creating the user', error.message);
+        if (!exists) {
+            // Both Athentication record and users document is created in Firestore
+            const { displayName, email } = userAuth;
+            const createdAt = new Date();
+            try {
+                await setDoc(userDocRef, {
+                    displayName,    
+                    email,
+                    createdAt,
+                    ...additionalInformation,
+                });
+            } catch (error: any | unknown) {
+                throw new Error('error creating the user', error.message);
+            }
         }
-    }
-    return userDocRef;
+        return userDocRef;
 }
 
 // const res = await createAuthUserWithEmailAndPassword(email, pass, confirmPass)

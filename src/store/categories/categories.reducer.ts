@@ -1,5 +1,3 @@
-import { AnyAction } from "redux";
-
 import { CATEGORIES_ACTION_ENUM } from './categories.types';
 import { Category } from "./categories.types";
 import { CategoriesAction } from "./categories.actions";

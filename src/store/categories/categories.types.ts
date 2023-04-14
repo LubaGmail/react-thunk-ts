@@ -1,5 +1,3 @@
-import { DocumentData } from "firebase/firestore";
-
 export const CATEGORIES_ACTION_TYPES = {
   FETCH_CATEGORIES_START: 'categories/FETCH_CATEGORIES_START',
   FETCH_CATEGORIES_SUCCESS: 'categories/FETCH_CATEGORIES_SUCCESS',
@@ -13,10 +11,11 @@ export enum CATEGORIES_ACTION_ENUM {
 }
 
 /* 
-    (5) [{…}, {…}, {…}, {…}, {…}]
-        [0]
-            items: (9) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
-            title: "Hats"
+    [0] {title: 'Hats', items: Array(9)}
+    [1] {title: 'Jackets', items: Array(5)}
+    [2] {items: Array(6), title: 'Mens'}
+        [0] {name: 'Camo Down Vest', id: 30, imageUrl: 'https://i...', price: 325}
+        [1] {id: 31, imageUrl: 'https://i...', price: 20, name: 'Floral T-shirt'}
 */
 
 export type CategoryItem = {
