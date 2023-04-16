@@ -1,15 +1,11 @@
 import { ProductType } from "./products.types";
-import { ProductsState } from "./products.reducer";
+import { RootState } from "../store";
 
-export const selectProducts = (state: any) => {
+export const selectProducts = (state: RootState) => {
     return state.products.productsArr;
 }
 
-type StateWrapper = {
-    products: ProductsState
-}
-
-export const selectFeatured = (state: StateWrapper): ProductType[] => {
+export const selectFeatured = (state: RootState): ProductType[] => {
     const featured: ProductType[] = [];              
     const productsArr = state.products.productsArr;
 
