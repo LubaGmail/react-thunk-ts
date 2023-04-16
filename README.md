@@ -4,7 +4,7 @@ Setup
             redux   react-redux     redux-logger    redux-thunk     redux-persist
             sass    styled-components
             
-    npm i --save-dev @types/redux-logger
+    npm i --save-dev @types/redux-logger        npm i @types/styled-components
 
     npm start       localhost:3000
 
